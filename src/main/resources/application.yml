@@ -1,0 +1,53 @@
+server:
+  port: 9090
+ 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka 
+  instance:
+     preferIpAddress: true    
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes: 
+      - id: ORDER_SERVICE
+        uri: http://localhost:8082/order/
+        predicates:
+        - Path=/order/**
+#        filters:
+#        - name: ORDER_SERVICE
+#          args:
+#            name: fallbackCommand
+#            fallbackUri: forward:/fallbackOrderService
+
+
+            
+hystrix:
+  command:
+    fallbackcmd: 
+      execution:
+        isolation:
+          thread:
+             timeoutInMilliseconds = 4000
+             
+    
+#management:  
+#  endpoint:
+#     web:
+#      expouser:
+#        include: hystrix.stream        
+            
+            
+#      - id: consumerModule
+#        uri: lb://SECOND-SERVICE
+#        predicates:
+#        - Path=/consumer/**
+#        filters:
+#        - name: Hystrix
+#          args:
+#            name: fallbackCommand
+#            fallbackUri: forward:/fallback/message 
